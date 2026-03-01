@@ -43,3 +43,43 @@ Creates a new user account with the provided data. All fields are required and m
 ### Notes
 - Ensure `Content-Type: application/json` header is set.
 - Passwords should be hashed by the server; do not send pre-hashed values.
+
+## POST /users/login
+
+Authenticates a user and returns a token.
+
+### Request Body
+- `email`: Valid email address (required)
+- `password`: Password (required, min 6 characters)
+
+#### Example
+```json
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+```
+
+### Response
+- **200 OK**: User successfully authenticated. Returns a token and user details.
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "user": {
+      "id": "12345",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "createdAt": "2026-03-01T12:00:00Z"
+    }
+  }
+  ```
+- **400 Bad Request**: Missing or invalid data in the request body.
+- **401 Unauthorized**: Invalid email or password.
+- **500 Internal Server Error**: Unexpected error occurred on the server.
+
+### Notes
+- Ensure `Content-Type: application/json` header is set.
+- Passwords are securely compared on the server; do not send pre-hashed values.

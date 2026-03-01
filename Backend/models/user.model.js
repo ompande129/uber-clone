@@ -1,3 +1,4 @@
+// schema for user collection in database, also contains methods for hashing password, comparing password and generating auth token
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
