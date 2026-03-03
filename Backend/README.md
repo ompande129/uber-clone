@@ -121,3 +121,70 @@ Logs out the authenticated user by invalidating their session or token.
 
 ### Notes
 - Ensure the user is authenticated by providing a valid token.
+
+## POST /captains/register
+
+Registers a new captain in the system.
+
+### Description
+Creates a new captain account with the provided data. All fields are required and must be sent as a JSON payload.
+
+### Request Body
+```json
+{
+  "fullname": {
+    "firstname": "string", // First name of the captain (required, min 3 characters)
+    "lastname": "string"   // Last name of the captain (optional, min 3 characters)
+  },
+  "email": "string",       // Valid email address (required)
+  "password": "string",    // Password (required, min 6 characters)
+  "vehicle": {
+    "color": "string",     // Vehicle color (required, min 3 characters)
+    "plate": "string",     // Vehicle plate number (required, min 3 characters)
+    "capacity": "integer", // Vehicle capacity (required, min 1)
+    "vehicleType": "string" // Vehicle type (required, must be one of "car", "motorcycle", "auto")
+  }
+}
+```
+
+### Response
+
+- **201 Created** - Captain successfully registered. Returns the created captain object and a token.
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "captain": {
+      "id": "12345",
+      "fullname": {
+        "firstname": "John",
+        "lastname": "Doe"
+      },
+      "email": "john.doe@example.com",
+      "vehicle": {
+        "color": "Red",
+        "plate": "ABC123",
+        "capacity": 4,
+        "vehicleType": "car"
+      },
+      "status": "inactive",
+      "createdAt": "2026-03-03T12:00:00Z"
+    }
+  }
+  ```
+- **400 Bad Request** - Missing or invalid data in the request body.
+  ```json
+  {
+    "errors": [
+      {
+        "msg": "First name is required",
+        "param": "fullname.firstname",
+        "location": "body"
+      }
+    ]
+  }
+  ```
+- **500 Internal Server Error** - Unexpected error occurred on the server.
+
+### Notes
+- Ensure `Content-Type: application/json` header is set.
+- Passwords should be hashed by the server; do not send pre-hashed values.
